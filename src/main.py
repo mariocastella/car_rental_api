@@ -3,6 +3,8 @@
 from fastapi import FastAPI
 import logging
 from src.routes import router
+import shutil
+from pathlib import Path
 
 # Configure logging to file
 logging.basicConfig(
@@ -10,6 +12,14 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s %(levelname)s %(message)s"
 )
+
+# Reset data file to original state before starting the app
+def reset_data_file():
+    original = Path(__file__).parent.parent / "data" / "data_original.json"
+    target = Path(__file__).parent.parent / "data" / "data.json"
+    shutil.copyfile(original, target)
+
+reset_data_file()
 
 app = FastAPI(
     title="Car Rental API",
