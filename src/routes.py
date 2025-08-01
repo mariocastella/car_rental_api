@@ -3,7 +3,7 @@ from fastapi import APIRouter
 from .models import Car, Booking
 from datetime import date
 from .storage import get_available_cars
-
+from .utils import validate_not_past_date
 
 # Create API router
 router = APIRouter()
@@ -19,11 +19,3 @@ def get_available_cars_endpoint(request_date: date):
     """
     validate_not_past_date(request_date)
     return get_available_cars(request_date)
-
-
-@router.post("/bookings/", 
-    response_model=Booking, 
-    status_code=201,
-    summary="Create a new car booking",
-    description="Create a new booking for a car on a specific date. Assuming that can not book a car on a past date.")
-#def create_booking_endpoint(new_booking: Booking):
