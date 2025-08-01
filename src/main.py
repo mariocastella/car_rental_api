@@ -2,6 +2,7 @@
 # Sets up FastAPI app and logging configuration and data reset
 from fastapi import FastAPI
 import logging
+from src.routes import router
 
 # Configure logging to file
 logging.basicConfig(
@@ -15,6 +16,9 @@ app = FastAPI(
     version="0.1.0",
     description="This API provides endpoints to manage car rentals, including listing available cars and creating bookings."
 )
+
+# Register API routes
+app.include_router(router)
 
 @app.get("/")
 def root():

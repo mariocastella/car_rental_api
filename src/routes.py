@@ -26,4 +26,4 @@ def get_available_cars_endpoint(request_date: date):
     status_code=201,
     summary="Create a new car booking",
     description="Create a new booking for a car on a specific date. Assuming that can not book a car on a past date.")
-def create_booking_endpoint(new_booking: Booking):
+#def create_booking_endpoint(new_booking: Booking):
