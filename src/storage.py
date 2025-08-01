@@ -3,7 +3,8 @@ import json
 import logging
 from pathlib import Path
 from datetime import date
-from .models import Car
+from .models import Car, Booking
+from .exceptions import CarNotFoundError, CarAlreadyBookedError
 
 # Path to the JSON data file
 DATA_FILE = Path(__file__).parent.parent / "data" / "data.json"
@@ -52,3 +53,49 @@ def get_available_cars(request_date: date) -> list[Car]:
     logging.info(f"Available cars query: {len(available_cars)}/{len(cars_list)} cars available on {request_date}")
     
     return available_cars
+
+def create_booking(new_booking: Booking) -> Booking:
+    """
+    Create a new booking for a car on a specific date.
+
+    Args:
+        new_booking (Booking): Booking object containing car_id and date.
+
+    Returns:
+        Booking: The created booking.
+
+    Raises:
+        CarNotFoundError: If the car does not exist.
+        CarAlreadyBookedError: If the car is already booked on that date.
+    """
+
+    cars_list, bookings_list = load_data()
+
+    # Check if the car exists
+    if not any(car["id"] == new_booking.car_id for car in cars_list):
+        raise CarNotFoundError(f"Car ID {new_booking.car_id} not found")
+
+    # Check if the car is already booked on the requested date
+    if any(
+        booking["car_id"] == new_booking.car_id and
+        booking["date"] == new_booking.date.isoformat()
+        for booking in bookings_list
+    ):
+        raise CarAlreadyBookedError(f"Car ID {new_booking.car_id} already booked on {new_booking.date}")
+
+    bookings_list.append({
+        "car_id": new_booking.car_id,
+        "date": new_booking.date.isoformat()
+    })
+
+    new_data = {
+        "cars": cars_list,
+        "bookings": bookings_list
+    }
+
+    with open(DATA_FILE, "w", encoding="utf-8") as f:
+        json.dump(new_data, f, indent=1)
+
+    logging.info(f"Booking created: car_id={new_booking.car_id}, date={new_booking.date}")
+
+    return new_booking
