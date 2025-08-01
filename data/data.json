@@ -1,0 +1,11 @@
+{
+    "cars": [
+      {"id": 1, "model": "Toyota Corolla"},
+      {"id": 2, "model": "Ford Fiesta"},
+      {"id": 3, "model": "Honda Civic"},
+      {"id": 4, "model": "Volkswagen Polo"},
+      {"id": 5, "model": "Renault Clio"}
+    ],
+    "bookings": [
+      {"car_id": 2, "date": "2026-08-01"}]
+}
