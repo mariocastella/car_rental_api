@@ -1,9 +1,11 @@
 # routes.py - API route definitions for Car Rental API
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, status
 from .models import Car, Booking
 from datetime import date
-from .storage import get_available_cars
+from .storage import get_available_cars, create_booking
+from .exceptions import CarNotFoundError, CarAlreadyBookedError
 from .utils import validate_not_past_date
+import logging
 
 # Create API router
 router = APIRouter()
@@ -19,3 +21,21 @@ def get_available_cars_endpoint(request_date: date):
     """
     validate_not_past_date(request_date)
     return get_available_cars(request_date)
+
+@router.post("/bookings/", 
+    response_model=Booking, 
+    status_code=201,
+    summary="Create a new car booking",
+    description="Create a new booking for a car on a specific date. Assuming that can not book a car on a past date.")
+def create_booking_endpoint(new_booking: Booking):
+    
+    validate_not_past_date(new_booking.date)
+   
+    try:
+        return create_booking(new_booking)
+    except (CarNotFoundError) as e: 
+        logging.error(f"Booking error: {e}")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail= str(e))
+    except CarAlreadyBookedError as e:
+        logging.error(f"Booking error: {e}")
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail= str(e))
