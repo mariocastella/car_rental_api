@@ -147,7 +147,23 @@ The application logs important events to `car_rental.log`:
 
 ## Future Enhancements
 
-*To be defined*
+ **Full Asynchronous Support:** Convert all API operations and file I/O to async for better performance and scalability.
+- **NoSQL Database:** Replace the JSON file storage with a NoSQL database (e.g., MongoDB) to better handle larger data volumes and concurrency.
+Testing strategy
+- **Testing strategy:** 
+Refactor tests to clearly separate unit and integration tests. Use unittest.mock or pytest-mock to isolate logic from file I/O and API behavior. Expand test coverage to include negative cases and edge conditions.
+- **Automated Testing with CI/CD:** Set up GitHub Actions (YAML workflow) or other CI pipelines to automatically run tests on every push or pull request.
+- **Bookings with Date Ranges:** Allow bookings that span multiple days (start date to end date) instead of only single-day reservations.
+- **Expanded Data Models:**  
+  - **Cars:** Add fields like brand, year, type (SUV, sedan), daily price, features (AC, GPS, etc.)  
+  - **Bookings:** Include customer information (name, email), booking status (confirmed, canceled), payment methods, timestamps.
+- **Additional Endpoints:**  
+  - Query bookings by car, customer, or date range  
+  - Cancel or modify bookings  
+  - Usage and revenue statistics per car or period
+- **Authentication & Authorization:** Add security layers using OAuth2 or JWT, so only authenticated users can create bookings or access sensitive data.
+- **Enhanced Documentation:** Provide richer Swagger examples, tutorials, and developer guides.
+- **Containerization:** Provide full Docker support with Dockerfiles and docker-compose for easy deployment.
 
 ## License
 
