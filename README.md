@@ -28,7 +28,7 @@ Use `python`, `py`, or `python3` according to your Python installation.
 1. Clone the repository:
 ```bash
 git clone <repository-url>
-cd car_rental
+cd car_rental_api
 ```
 
 2. Install dependencies:
